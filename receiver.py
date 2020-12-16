@@ -25,7 +25,10 @@ class Receiver(threading.Thread):
 
     def run(self):
         connection = pika.BlockingConnection(pika.ConnectionParameters(
-            'localhost',
+            'rabbitmq', 
+            5672,
+            'denarius',
+            pika.PlainCredentials('denarius', 'denarius'),
         ))
 
         channel = connection.channel()

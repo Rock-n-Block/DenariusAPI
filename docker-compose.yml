@@ -14,7 +14,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "localhost:8000:8000"
+      - "${DJANGO_PORT}:8000"
     depends_on:
       - db
       - rabbitmq
@@ -38,7 +38,7 @@ services:
       RABBITMQ_DEFAULT_PASS:
       RABBITMQ_DEFAULT_VHOST:
     networks:
-      praem-ico-net:
+      denarius-net:
 
 networks:
-  praem-ico-net:
+  denarius-net:
