@@ -1,8 +1,7 @@
 from django.conf.urls import url
 
-from denariusAPI.transfers.views import TransferView, HistoryView
+from denariusAPI.transfers.views import TransferView
 
 urlpatterns = [
-    url('transfer/'r'^$', TransferView.as_view(), name='create-transfer'),
-    url(r'^$', HistoryView.as_view(), name='get-transaction-history'),
+    url(r'^$', TransferView.as_view(), name='create-transfer'),
 ]

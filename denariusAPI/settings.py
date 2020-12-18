@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'denariusAPI.transfers',
     'denariusAPI.exchange_requests',
     'denariusAPI.balance',
+    'denariusAPI.history',
 ]
 
 MIDDLEWARE = [

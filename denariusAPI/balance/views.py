@@ -21,7 +21,7 @@ balance_response = openapi.Response(
         type=openapi.TYPE_OBJECT,
         properties={
             'currency': openapi.Schema(type=openapi.TYPE_STRING),
-            'amount': openapi.Schema(type=openapi.TYPE_STRING)
+            'amount': openapi.Schema(type=openapi.TYPE_NUMBER)
 },
     )
 )
@@ -46,7 +46,7 @@ class BalanceView(APIView):
         response_data = {'amount': balance['balance'], 'currency': 'DUC'}
         print('res:', response_data)
 
-        return Response(response_data, status=status.HTTP_201_CREATED)
+        return Response(response_data, status=status.HTTP_200_OK)
 
 
 def create_ducatus_user():

@@ -42,4 +42,6 @@ urlpatterns = [
     url(r'^api/v1/exchange/', include('denariusAPI.exchange_requests.urls')),
     url(r'^api/v1/balance/', include('denariusAPI.balance.urls')),
     url(r'^api/v1/transfers/', include('denariusAPI.transfers.urls')),
+    url(r'^api/v1/history/', include('denariusAPI.history.urls')),
+
 ]
