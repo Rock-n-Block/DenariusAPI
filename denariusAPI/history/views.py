@@ -17,7 +17,7 @@ history_response = openapi.Response(
     description='Response with transfer history',
     schema=openapi.Schema(
         type=openapi.TYPE_OBJECT,
-        properties={'txs':openapi.Schema(type=openapi.TYPE_STRING),},
+        properties={'txs':openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Items(type=openapi.TYPE_STRING)),},
     )
 )
 
@@ -26,19 +26,10 @@ class HistoryView(APIView):
 
     @swagger_auto_schema(
         operation_description="request to get transfer history",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required = ['wallet_address'],
-            properties = {
-                'wallet_address':openapi.Schema(type=openapi.TYPE_STRING),
-            },
-        ),
         responses={200: history_response},
     )
 
-    def post(self, request):
-        request_data = request.data
-        address = request_data.get('wallet address')
+    def get(self, request, address):
         transaction_list = get_transactions(address)
         response_data = {'txs': transaction_list}
         print('res:', response_data)

@@ -147,6 +147,10 @@ REST_FRAMEWORK = {
 
 SHELL_PLUS = 'ptpython'
 
+USE_X_FORWARDED_HOST = True
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 try:
     from denariusAPI.settings_local import *
 except ImportError:

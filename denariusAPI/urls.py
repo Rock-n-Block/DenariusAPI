@@ -22,6 +22,9 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from denariusAPI.balance.views import BalanceView
+
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Denarius API",
@@ -37,11 +40,12 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', schema_view),
-    url(r'^api/v1/swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    url(r'^api/v1/swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    url(r'^api/v1/exchange/', include('denariusAPI.exchange_requests.urls')),
-    url(r'^api/v1/balance/', include('denariusAPI.balance.urls')),
-    url(r'^api/v1/transfers/', include('denariusAPI.transfers.urls')),
-    url(r'^api/v1/history/', include('denariusAPI.history.urls')),
+    #path('api/v1/swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('api/v1/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/v1/exchange/', include('denariusAPI.exchange_requests.urls')),
+    path('api/v1/balance/<str:address>/', BalanceView.as_view(), name='create-user'),
+    path('api/v1/transfers/', include('denariusAPI.transfers.urls')),
+    path('api/v1/history/', include('denariusAPI.history.urls')),
 
 ]
+

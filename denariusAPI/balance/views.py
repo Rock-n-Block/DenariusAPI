@@ -30,17 +30,10 @@ class BalanceView(APIView):
 
     @swagger_auto_schema(
         operation_description="request to get balance",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required='address',
-            properties={'address': openapi.Schema(type=openapi.TYPE_STRING)},
-        ),
         responses={200: balance_response},
 
     )
-    def post(self, request):
-        request_data = request.data
-        address = request_data.get('address')
+    def get(self, request, address):
         balance = requests.get(f'https://ducapi.rocknblock.io/api/DUC/mainnet/address/{address}/balance')
         balance = balance.json()
         response_data = {'amount': balance['balance'], 'currency': 'DUC'}
