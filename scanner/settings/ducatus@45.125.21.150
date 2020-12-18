@@ -1,0 +1,39 @@
+NETWORKS = {
+    'ETHEREUM_MAINNET': {
+        # 'url': 'https://mainnet.infura.io/v3/f81b2735932e4f61af3fac782cd74cc1',
+        'url': 'https://ropsten.infura.io/v3/f81b2735932e4f61af3fac782cd74cc1',
+        'polling_interval': 10,
+        'commitment_chain_length': 5,
+        'queue': 'notification-ethereum',
+        'etherscan_api_key': 'MHVIZTUY4QVFGHAXBMHFZ2TA23QJPMIXAF',
+        'is_testnet': True
+    },
+    'DUCATUSX_MAINNET': {
+        'url': 'http://89.40.14.180:8545',
+        'queue': 'exchange-ducx',
+        'polling_interval': 10,
+        'commitment_chain_length': 5,
+    }
+}
+
+ERC20_TOKENS = {
+
+}
+
+ERC20_REFUND_ADRESSES = {
+
+}
+
+ERC20_UPGRADE_ADRESSES = {
+
+}
+
+
+DECIMALS = {
+
+}
+
+mywish_pg_engine = 'postgresql://postgres:admin@localhost/lastwill_new'
+
+DEBUG_MODE = True
+

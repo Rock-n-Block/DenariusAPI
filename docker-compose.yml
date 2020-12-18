@@ -30,6 +30,18 @@ services:
     restart: unless-stopped
     networks:
       denarius-net:
+  scanner:
+    build:
+      context: .
+      dockerfile: dockerfiles/scanner.Dockerfile
+    depends_on:
+      - db
+      - rabbitmq
+    restart: unless-stopped
+    networks:
+      ducatus-net:
+    volumes:
+      - ./scanner/settings:/app/scanner/settings
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: rabbitmq
