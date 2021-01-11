@@ -87,7 +87,7 @@ def confirm_transfer(message):
     transfer.number_of_confirmations = message['confirmations']
     transfer.save()
     requests.post(url = 'https://prod-11.westeurope.logic.azure.com/workflows/ac0f72b72d4d48508f2b2a2a2693d1f6/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ohdW3-hM7xDJUxIjx-8VdDOgQ-_ut06IUYG4awAjxwk', 
-    data = {'tx_hash':transfer.tx_hash}, headers={"x-api-key" : 'https://prod-11.westeurope.logic.azure.com/workflows/ac0f72b72d4d48508f2b2a2a2693d1f6/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ohdW3-hM7xDJUxIjx-8VdDOgQ-_ut06IUYG4awAjxwk'}
+    data = {'tx_hash':transfer.tx_hash}, headers={"x-api-key" : 'wCB0kC1J.hXtzE8BJnB6zAgGmvBNjj9D7o3z8zsgK'}
     )
     print('transfer completed ok')
     return
@@ -116,7 +116,7 @@ def parse_payment_message(message):
         )
         transfer.save()
         requests.post(url = 'https://prod-11.westeurope.logic.azure.com/workflows/ac0f72b72d4d48508f2b2a2a2693d1f6/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ohdW3-hM7xDJUxIjx-8VdDOgQ-_ut06IUYG4awAjxwk',
-        data = {'tx_hash':transfer.tx_hash}, headers={"x-api-key" : 'https://prod-11.westeurope.logic.azure.com/workflows/ac0f72b72d4d48508f2b2a2a2693d1f6/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ohdW3-hM7xDJUxIjx-8VdDOgQ-_ut06IUYG4awAjxwk'}
+        data = {'tx_hash':transfer.tx_hash}, headers={"x-api-key" : 'wCB0kC1J.hXtzE8BJnB6zAgGmvBNjj9D7o3z8zsgK'}
         )
 
         print(f'PAYMENT: {amount} {currency} to user {ducatus_user.id} with hash {tx}', flush=True)
