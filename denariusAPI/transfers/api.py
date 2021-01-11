@@ -1,14 +1,20 @@
 import sys
 import traceback
+import requests
 from decimal import Decimal
+from rest_framework_api_key.models import APIKey
 
 from denariusAPI.transfers.models import DucatusTransfer
+from denariusAPI.exchange_requests.models import DucatusUser
 from denariusAPI.settings import ROOT_KEYS
 from denariusAPI.exchange_requests.models import DucatusUser
 from denariusAPI.consts import DECIMALS
 from bip32utils import BIP32Key
 from denariusAPI.Bitcoin_api import BitcoinRPC, BitcoinAPI
 from denariusAPI.bip32_ducatus import DucatusWallet
+
+class TransferException(Exception):
+    pass
 
 
 def transfer_ducatus(from_address, to_address, amount):
@@ -71,13 +77,46 @@ def save_transfer(from_address, tx, amount, currency, to_address, transaction_fe
 
 
 def confirm_transfer(message):
-    transfer_id = message['transferId']
+    transfer_id = message['transferID']
     # transfer_address = message['address']
     transfer = DucatusTransfer.objects.get(id=transfer_id, state='WAITING_FOR_CONFIRMATION')
     print('transfer id {id} address {addr} '.format(id=transfer_id, addr=transfer.ducatus_user.address),
           flush=True)
     # if transfer_address == transfer.request.duc_address:
     transfer.state = 'DONE'
+    transfer.number_of_confirmations = message['confirmations']
     transfer.save()
+    requests.post(url = 'https://prod-11.westeurope.logic.azure.com/workflows/ac0f72b72d4d48508f2b2a2a2693d1f6/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ohdW3-hM7xDJUxIjx-8VdDOgQ-_ut06IUYG4awAjxwk', 
+    data = {'tx_hash':transfer.tx_hash}, headers={"x-api-key" : 'https://prod-11.westeurope.logic.azure.com/workflows/ac0f72b72d4d48508f2b2a2a2693d1f6/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ohdW3-hM7xDJUxIjx-8VdDOgQ-_ut06IUYG4awAjxwk'}
+    )
     print('transfer completed ok')
     return
+
+
+def parse_payment_message(message):
+    tx = message.get('transactionHash')
+
+    if not DucatusTransfer.objects.filter(tx_hash=tx).count() > 0:
+        ducatus_user = message.get('ducatus_user')
+        ducatus_user = DucatusUser.objects.get(id=ducatus_user)
+        amount = message.get('amount')
+        currency = message.get('currency')
+        to_address = message.get('to_address')
+        state=message.get('status')
+        number_of_confirmations = message.get('confirmations')
+
+        transfer = DucatusTransfer(
+            ducatus_user = ducatus_user,
+            tx_hash = tx,
+            to_address = to_address,
+            amount = amount,
+            currency = currency,
+            state = state,
+            number_of_confirmations = number_of_confirmations
+        )
+        transfer.save()
+        requests.post(url = 'https://prod-11.westeurope.logic.azure.com/workflows/ac0f72b72d4d48508f2b2a2a2693d1f6/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ohdW3-hM7xDJUxIjx-8VdDOgQ-_ut06IUYG4awAjxwk',
+        data = {'tx_hash':transfer.tx_hash}, headers={"x-api-key" : 'https://prod-11.westeurope.logic.azure.com/workflows/ac0f72b72d4d48508f2b2a2a2693d1f6/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ohdW3-hM7xDJUxIjx-8VdDOgQ-_ut06IUYG4awAjxwk'}
+        )
+
+        print(f'PAYMENT: {amount} {currency} to user {ducatus_user.id} with hash {tx}', flush=True)

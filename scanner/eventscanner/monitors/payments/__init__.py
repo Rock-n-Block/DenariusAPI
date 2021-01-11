@@ -1,1 +1,1 @@
-from .eth_payment_monitor import EthPaymentMonitor, DucxPaymentMonitor
+from .btc import DucPaymentMonitor

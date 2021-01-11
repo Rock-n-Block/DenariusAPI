@@ -8,7 +8,7 @@ Base = automap_base()
 engine = create_engine(mywish_pg_engine)
 Base.prepare(engine, reflect=True)
 
-ExchangeRequests = Base.classes.exchanges_exchangerequest
-Transfers = Base.classes.transfers_transfer
+DucatusUser = Base.classes.exchange_requests_ducatususer
+Transfers = Base.classes.transfers_ducatustransfer
 
 session = Session(engine)

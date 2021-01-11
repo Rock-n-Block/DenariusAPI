@@ -5,11 +5,11 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
-from networks import EthMaker
+from networks import BTCMaker
 from settings.settings_local import NETWORKS
 
 networks = {
-    'DUCATUSX_MAINNET': EthMaker,
+    'DUCATUS_MAINNET': BTCMaker,
 }
 
 class ScanEntrypoint(threading.Thread):

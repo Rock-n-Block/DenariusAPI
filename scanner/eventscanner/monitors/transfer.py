@@ -1,5 +1,5 @@
 from eventscanner.queue.pika_handler import send_to_backend
-from mywish_models.models import Transfers, ExchangeRequests, session
+from mywish_models.models import Transfers, DucatusUser, session
 from scanner.events.block_event import BlockEvent
 from settings.settings_local import NETWORKS
 
@@ -17,22 +17,23 @@ class TransferMonitor:
         tx_hashes = set()
         for address_transactions in block_event.transactions_by_address.values():
             for transaction in address_transactions:
+                confirmations = transaction.inputs
                 tx_hashes.add(transaction.tx_hash)
-
         transfers = session \
             .query(Transfers) \
             .filter(Transfers.tx_hash.in_(tx_hashes)) \
             .distinct(Transfers.tx_hash) \
             .all()
         for transfer in transfers:
-            ID = [transfer.exchange_request_id,]
+            ID = [transfer.ducatus_user_id,]
             print(ID)
-            exchange_request = session.query(ExchangeRequests).filter(ExchangeRequests.id.in_(ID)).all()
-            print(exchange_request)
+            ducatus_user = session.query(DucatusUser).filter(DucatusUser.id.in_(ID)).all()
+            print(ducatus_user)
             message = {
                 'transactionHash': transfer.tx_hash,
-                'userID': exchange_request[0].userID,
+                'ducatus_user': ducatus_user[0].id,
                 'transferID': transfer.id,
+                'confirmations': confirmations,
                 'amount': int(transfer.amount),
                 'success': True,
                 'status': 'COMMITTED',
@@ -40,6 +41,6 @@ class TransferMonitor:
             send_to_backend(cls.event_type, NETWORKS[block_event.network.type]['queue'], message)
 
 
-class DucxTransferMonitor(TransferMonitor):
-    network_type = ['DUCATUSX_MAINNET']
-    currency = 'DUCX'
+class DucTransferMonitor(TransferMonitor):
+    network_type = ['DUCATUS_MAINNET']
+    currency = 'DUC'

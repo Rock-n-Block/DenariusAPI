@@ -39,7 +39,7 @@ services:
       - rabbitmq
     restart: unless-stopped
     networks:
-      ducatus-net:
+      denarius-net:
     volumes:
       - ./scanner/settings:/app/scanner/settings
   rabbitmq:

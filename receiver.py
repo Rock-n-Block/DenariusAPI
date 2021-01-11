@@ -13,7 +13,7 @@ django.setup()
 
 from django.core.exceptions import ObjectDoesNotExist
 from denariusAPI.settings import NETWORK_SETTINGS
-#from denariusAPI.transfers.api import parse_payment_message, TransferException
+from denariusAPI.transfers.api import parse_payment_message, TransferException
 from denariusAPI.transfers.api import confirm_transfer
 
 
@@ -57,7 +57,7 @@ class Receiver(threading.Thread):
         print('PAYMENT MESSAGE RECEIVED', flush=True)
         parse_payment_message(message)
 
-    def transferred(self, message):
+    def transfer_confirm(self, message):
         print('TRANSFER CONFIRMATION RECEIVED', flush=True)
         confirm_transfer(message)
 

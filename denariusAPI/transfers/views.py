@@ -42,11 +42,11 @@ class TransferView(APIView):
         operation_description="request to transfer",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
-            required = ['sender address', 'receiver address', 'DUC amount'],
+            required = ['sender_address', 'receiver_address', 'DUC_amount'],
             properties = {
                 'sender_address':openapi.Schema(type=openapi.TYPE_STRING),
                 'receiver_address': openapi.Schema(type=openapi.TYPE_STRING),
-                'DUC amount': openapi.Schema(type=openapi.TYPE_NUMBER),
+                'DUC_amount': openapi.Schema(type=openapi.TYPE_NUMBER),
 
             },
         ),
@@ -55,9 +55,9 @@ class TransferView(APIView):
 
     def post(self, request):
         request_data = request.data
-        from_address = request_data.get('sender address')
-        to_address = request_data.get('receiver address')
-        amount = request_data.get('DUC amount')
+        from_address = request_data.get('sender_address')
+        to_address = request_data.get('receiver_address')
+        amount = request_data.get('DUC_amount')
         try:
             transfer = transfer_ducatus(from_address, to_address, amount)
             response_data = {'tx_hash': transfer.tx_hash, 'sender_address': transfer.from_address, 'receiver_address': transfer.to_address,

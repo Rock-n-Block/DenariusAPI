@@ -4,7 +4,7 @@ import json
 
 def send_to_backend(type, queue, message):
     connection = pika.BlockingConnection(pika.ConnectionParameters(
-        'localhost',
+        'rabbitmq',
         5672,
         'denarius',
         pika.PlainCredentials('denarius', 'denarius'),

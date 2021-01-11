@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework_api_key',
     'drf_yasg',
     'django_extensions',
 
@@ -151,8 +152,17 @@ USE_X_FORWARDED_HOST = True
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework_api_key.permissions.HasAPIKey",
+    ]
+}
+API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
+
+
 try:
     from denariusAPI.settings_local import *
 except ImportError:
     print('Cannot import local settings', flush=True)
+
 
