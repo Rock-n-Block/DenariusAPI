@@ -6,7 +6,7 @@ from rest_framework_api_key.models import APIKey
 
 from denariusAPI.transfers.models import DucatusTransfer
 from denariusAPI.exchange_requests.models import DucatusUser
-from denariusAPI.settings import ROOT_KEYS
+from denariusAPI.settings import ROOT_KEYS, WEB_HOOK_SECRET
 from denariusAPI.exchange_requests.models import DucatusUser
 from denariusAPI.consts import DECIMALS
 from bip32utils import BIP32Key
@@ -87,7 +87,7 @@ def confirm_transfer(message):
     transfer.number_of_confirmations = message['confirmations']
     transfer.save()
     requests.post(url = 'https://prod-11.westeurope.logic.azure.com/workflows/ac0f72b72d4d48508f2b2a2a2693d1f6/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ohdW3-hM7xDJUxIjx-8VdDOgQ-_ut06IUYG4awAjxwk', 
-    data = {'tx_hash':transfer.tx_hash}, headers={"x-api-key" : 'wCB0kC1J.hXtzE8BJnB6zAgGmvBNjj9D7o3z8zsgK'}
+    data = {'tx_hash':transfer.tx_hash, 'web_hook_secret': WEB_HOOK_SECRET}
     )
     print('transfer completed ok')
     return
@@ -115,8 +115,8 @@ def parse_payment_message(message):
             number_of_confirmations = number_of_confirmations
         )
         transfer.save()
-        requests.post(url = 'https://prod-11.westeurope.logic.azure.com/workflows/ac0f72b72d4d48508f2b2a2a2693d1f6/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ohdW3-hM7xDJUxIjx-8VdDOgQ-_ut06IUYG4awAjxwk',
-        data = {'tx_hash':transfer.tx_hash}, headers={"x-api-key" : 'wCB0kC1J.hXtzE8BJnB6zAgGmvBNjj9D7o3z8zsgK'}
+        requests.post(url = 'https://prod-11.westeurope.logic.azure.com/workflows/ac0f72b72d4d48508f2b2a2a2693d1f6/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ohdW3-hM7xDJUxIjx-8VdDOgQ-_ut06IUYG4awAjxwk', 
+        data = {'tx_hash':transfer.tx_hash, 'web_hook_secret': WEB_HOOK_SECRET}
         )
 
         print(f'PAYMENT: {amount} {currency} to user {ducatus_user.id} with hash {tx}', flush=True)
